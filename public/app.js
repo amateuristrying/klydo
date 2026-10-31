@@ -1,6 +1,6 @@
 (() => {
-  // Set this to your form backend's URL and sign-ups POST there as JSON.
-  const SIGNUP_ENDPOINT = "";
+  // Sign-ups POST here as JSON (functions/api/signup.js). Inside a Claude artifact they use its database instead.
+  const SIGNUP_ENDPOINT = window.claude ? "" : "/api/signup";
 
   const root = document.documentElement;
   const $ = (s, c = document) => c.querySelector(s);
