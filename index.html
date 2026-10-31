@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Klydo AI</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Klydo AI puts a council, a design studio, a voice room, a memory map and a notebook in one place, and they all share one memory of your idea.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Geist+Mono:wght@400;500&family=Host+Grotesk:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script>
+  try {
+    const saved = localStorage.getItem("klydo-theme");
+    if (saved) document.documentElement.setAttribute("data-theme", saved);
+  } catch (e) {}
+  document.documentElement.classList.add("js");
+</script>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 32 32">
+    <path fill="currentColor" fill-rule="evenodd" d="M16 2C22 9 22 23 16 30C10 23 10 9 16 2ZM28.12 9C25.06 17.7 12.94 24.7 3.88 23C6.94 14.3 19.06 7.3 28.12 9ZM28.12 23C19.06 24.7 6.94 17.7 3.88 9C12.94 7.3 25.06 14.3 28.12 23Z"/>
+  </symbol>
+</svg>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="win loader-win">
+    <div class="win-bar"><span>Klydo 0.1</span><span>Booting</span></div>
+    <div class="win-body">
+      <p>Loading ...</p>
+      <p id="loaderLine">Waking the council</p>
+      <div class="loader-bar"><i id="loaderFill"></i><span id="loaderPct">0%</span></div>
+    </div>
+  </div>
+</div>
+
+<canvas id="tunnel" class="tunnel" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <a class="brand" href="#top" aria-label="Klydo home">
+    <svg class="brand-mark" aria-hidden="true"><use href="#mark"/></svg>
+    <span>klydo</span>
+  </a>
+  <nav class="nav-links" aria-label="Main">
+    <a href="#problem">The problem</a>
+    <a href="#rooms">Rooms</a>
+    <a href="#extras">More rooms</a>
+  </nav>
+  <div class="nav-right">
+    <button class="theme" id="themeToggle" type="button" aria-label="Switch theme">
+      <span class="theme-knob" id="themeKnob"></span>
+      <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>
+      <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.3 8.3 0 0 1 9.4 4a8.3 8.3 0 1 0 10.6 10.6Z"/></svg>
+    </button>
+    <button class="chip" type="button" data-access>Get early access</button>
+  </div>
+  <span class="nav-progress" id="navProgress"></span>
+</header>
+
+<main>
+
+  <section class="hero" id="top">
+    <div class="win hero-win" data-float>
+      <div class="win-bar"><span>klydo.sys</span><span>0.1</span></div>
+      <div class="win-body">
+        <p>Time since you last<br>re-explained your idea</p>
+        <p class="hero-clock" id="heroClock">00:00:00</p>
+      </div>
+    </div>
+
+    <div class="hero-copy">
+      <p class="eyebrow" data-scramble>Klydo AI / Private beta</p>
+      <h1 class="hero-title" id="heroTitle">Bring a half-baked idea. Leave with the whole thing.</h1>
+      <div class="hero-foot">
+        <p class="hero-sub">A council, a design studio, a voice room, a memory map and a notebook in one place. Every tool shares one memory of your idea.</p>
+        <div class="hero-cta">
+          <button class="btn" type="button" data-access data-magnet>Get early access</button>
+          <a class="text-link" href="#rooms">See the rooms</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="era" id="era">A new era for half-baked ideas</p>
+  </section>
+
+  <section class="ticker" aria-label="Things other AIs say">
+    <div class="ticker-row" data-dir="1">
+      <span>You're absolutely right!</span><span>Great question!</span><span>As of my last update</span><span>Let's delve in</span><span>I apologize for the confusion</span><span>Here are 10 tips</span>
+      <span aria-hidden="true">You're absolutely right!</span><span aria-hidden="true">Great question!</span><span aria-hidden="true">As of my last update</span><span aria-hidden="true">Let's delve in</span><span aria-hidden="true">I apologize for the confusion</span><span aria-hidden="true">Here are 10 tips</span>
+    </div>
+    <div class="ticker-row" data-dir="-1">
+      <span>Could you share more context?</span><span>That's a fascinating idea</span><span>I don't have memory of that</span><span>Let's unpack this</span><span>Certainly!</span><span>In conclusion</span>
+      <span aria-hidden="true">Could you share more context?</span><span aria-hidden="true">That's a fascinating idea</span><span aria-hidden="true">I don't have memory of that</span><span aria-hidden="true">Let's unpack this</span><span aria-hidden="true">Certainly!</span><span aria-hidden="true">In conclusion</span>
+    </div>
+  </section>
+
+  <section class="problem" id="problem">
+    <div class="problem-inner">
+      <div class="problem-head">
+        <p class="eyebrow" data-scramble>How it feels</p>
+        <h2 data-chars>Talking to most AIs feels like this.</h2>
+      </div>
+
+      <figure class="still">
+        <img src="assets/illustration.svg" width="481" height="611" alt="Two figures sit facing each other. One glows with a calm halo. The other sits on a box, completely on fire.">
+        <figcaption>
+          <span>The AI. Glowing. Has never heard of you.</span>
+          <span>You. Explaining your idea again.</span>
+        </figcaption>
+      </figure>
+
+      <div class="problem-chat">
+        <ol class="chat">
+          <li class="me"><b>You</b>Remember the idea I told you about yesterday?</li>
+          <li class="bot"><b>AI</b>I don't have memory of past conversations! But what a great idea.</li>
+          <li class="me"><b>You</b>You don't know what it is.</li>
+          <li class="bot"><b>AI</b>You're absolutely right! Here are 10 startup ideas.</li>
+        </ol>
+        <div class="win dialog" role="group" aria-label="A joke error dialog">
+          <div class="win-bar"><span>Chat 1.0</span><span>Alert</span></div>
+          <div class="win-body">
+            <p>Context full. Your idea has been summarized as &ldquo;a thing&rdquo;.</p>
+            <div class="dialog-btns"><span>Start over</span><span>Start over</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dawn" id="why">
+    <div class="dawn-inner">
+      <p class="eyebrow" data-scramble>Why Klydo</p>
+      <p class="dawn-text" id="dawnText">Every AI you use starts from zero. You paste the same context, rewrite the same brief and lose the good idea somewhere around tab forty. Klydo keeps one living memory of your idea and hands it to every tool you open. The council knows what the designer drew. The designer knows what you said on your walk. Your notes know all of it.</p>
+    </div>
+  </section>
+
+  <section class="rooms" id="rooms">
+    <div class="rooms-track" id="roomsTrack">
+
+      <article class="room room-intro">
+        <div class="room-intro-inner">
+          <p class="eyebrow">The floor plan</p>
+          <h2 class="intro-big" data-room-title>Five rooms.<br>One memory.</h2>
+          <p class="room-lede">We'll follow one idea through all five: an app that reminds you to call your parents. It starts out mediocre.</p>
+        </div>
+      </article>
+
+      <article class="room room-council" data-room="council">
+        <div class="room-copy">
+          <p class="eyebrow">Room / Debate</p>
+          <h3 data-room-title>AI Council</h3>
+          <p>Put your idea in front of a table of AIs that disagree with each other. They argue, you watch, and the idea comes out sharper.</p>
+        </div>
+        <div class="win stage">
+          <div class="win-bar"><span>Council</span><span>call-mom.idea</span></div>
+          <div class="win-body">
+            <div class="idea idea-old"><i>v1</i><p>An app that reminds you to call your parents.</p></div>
+            <ul class="seats">
+              <li><b>Skeptic</b><p>Nobody forgets to call. They run out of things to say.</p></li>
+              <li><b>Customer</b><p>I'd call more if I had a reason to.</p></li>
+              <li><b>Operator</b><p>Send one question a week, pulled from old family photos.</p></li>
+              <li><b>Investor</b><p>That's a habit. Families would pay for that.</p></li>
+            </ul>
+            <div class="idea idea-new"><i>v4</i><p>One question a week from your family's old photos, so there's always a reason to call.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="room room-design" data-room="design">
+        <div class="room-copy">
+          <p class="eyebrow">Room / Vibe design</p>
+          <h3 data-room-title>Design Show</h3>
+          <p>Describe a feeling and watch the screens change on stage. Turn the dials until it looks right.</p>
+        </div>
+        <div class="win stage">
+          <div class="win-bar"><span>Design Show</span><span>Live</span></div>
+          <div class="win-body design-grid">
+            <div class="design-controls">
+              <p class="prompt">make it feel like a Sunday phone call</p>
+              <div class="dial"><span>Warmth</span><i><u data-to="86"></u></i></div>
+              <div class="dial"><span>Volume</span><i><u data-to="28"></u></i></div>
+              <div class="dial"><span>Nostalgia</span><i><u data-to="72"></u></i></div>
+            </div>
+            <div class="phone">
+              <div class="phone-real">
+                <div class="phone-photo"></div>
+                <small>This week's question</small>
+                <p>Who took this photo in 1994?</p>
+                <span class="phone-btn">Call Mom</span>
+              </div>
+              <div class="phone-wire" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="room room-voice" data-room="voice">
+        <div class="room-copy">
+          <p class="eyebrow">Room / Think out loud</p>
+          <h3 data-room-title>Voice Room</h3>
+          <p>Talk through it on a walk. Klydo listens, asks a good question back and pulls out what mattered.</p>
+        </div>
+        <div class="win stage">
+          <div class="win-bar"><span>Voice Room</span><span>Rec 00:42</span></div>
+          <div class="win-body">
+            <div class="wave" id="wave" aria-hidden="true"></div>
+            <p class="transcript" id="transcript">Okay so what if the photo is the reminder. Like Grandpa's old boat. Mom has a whole story about that boat.</p>
+            <ul class="chips">
+              <li>Idea: photo as reminder</li>
+              <li>Story: Grandpa's boat</li>
+              <li>To do: collect family photos</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="room room-map" data-room="map">
+        <div class="room-copy">
+          <p class="eyebrow">Room / See your thinking</p>
+          <h3 data-room-title>Memory Map</h3>
+          <p>Every idea, decision and dead end becomes a node. Ask why something changed and follow the line back to the moment.</p>
+        </div>
+        <div class="win stage">
+          <div class="win-bar"><span>Memory Map</span><span>7 nodes</span></div>
+          <div class="win-body">
+            <svg class="graph" id="graph" viewBox="0 0 520 400" role="img" aria-label="A graph of connected nodes around the Call Mom idea"></svg>
+            <p class="graph-answer"><b>Why one question a week?</b> The Skeptic said people run out of things to say.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="room room-notes" data-room="notes">
+        <div class="room-copy">
+          <p class="eyebrow">Room / Write it down</p>
+          <h3 data-room-title>Vibe Notes</h3>
+          <p>A notebook that writes with you. It already knows what the council said, what you drew and what you said on your walk.</p>
+        </div>
+        <div class="win stage">
+          <div class="win-bar"><span>Vibe Notes</span><span>call-mom.md</span></div>
+          <div class="win-body notes-body">
+            <h4>Call Mom</h4>
+            <p class="note-line" id="noteLine">One question a week from your family's old photos, so there's always a reason to call.</p>
+            <div class="slash">
+              <span>/ask the council</span>
+              <span class="on">/turn into screens</span>
+              <span>/find in memory</span>
+            </div>
+            <ul class="chips">
+              <li>Voice, Tue 07:42</li>
+              <li>Council v4</li>
+              <li>Screen v3</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="journey">
+    <div class="journey-inner">
+      <div class="journey-head">
+        <p class="eyebrow" data-scramble>One idea, thirty hours</p>
+        <h2 data-chars>Nothing gets lost between rooms.</h2>
+      </div>
+      <ol class="stops" id="stops">
+        <li class="rail" aria-hidden="true"><i></i></li>
+        <li class="stop"><time>Tue 07:42</time><b>Voice Room</b><p>You say the idea out loud on a walk.</p></li>
+        <li class="stop"><time>Tue 07:43</time><b>Vibe Notes</b><p>The rambling becomes a clean brief.</p></li>
+        <li class="stop"><time>Tue 21:10</time><b>AI Council</b><p>The Skeptic finds the hole. The idea gets better.</p></li>
+        <li class="stop"><time>Wed 10:05</time><b>Design Show</b><p>Three screens appear, built from the new brief.</p></li>
+        <li class="stop"><time>Wed 13:30</time><b>Memory Map</b><p>Every decision stays linked to the reason behind it.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="extras" id="extras">
+    <div class="extras-inner">
+      <div class="extras-head">
+        <p class="eyebrow" data-scramble>Also on the floor plan</p>
+        <h2 data-chars>Six more rooms we couldn't leave out.</h2>
+      </div>
+      <div class="tiles" id="tiles">
+        <article class="win tile">
+          <div class="win-bar"><span>Red Team</span><span>Hostile</span></div>
+          <div class="win-body"><p>Hires a polite enemy. It finds every way your idea could fail before your customers do.</p></div>
+        </article>
+        <article class="win tile">
+          <div class="win-bar"><span>Focus Group</span><span>Simulated</span></div>
+          <div class="win-body"><p>Pretend customers react, complain and walk out, with quotes you can screenshot.</p></div>
+        </article>
+        <article class="win tile">
+          <div class="win-bar"><span>Rewind</span><span>History</span></div>
+          <div class="win-body"><p>Scrub back through every version of an idea and branch from the one you should have kept.</p></div>
+        </article>
+        <article class="win tile">
+          <div class="win-bar"><span>Ship Room</span><span>Export</span></div>
+          <div class="win-body"><p>Turns a finished idea into a spec, a pitch deck and a task list.</p></div>
+        </article>
+        <article class="win tile">
+          <div class="win-bar"><span>Morning Spark</span><span>Daily</span></div>
+          <div class="win-body"><p>One useful question each morning, pulled from whatever you left unfinished.</p></div>
+        </article>
+        <article class="win tile">
+          <div class="win-bar"><span>Move-In Day</span><span>Import</span></div>
+          <div class="win-body"><p>Bring your old chats and docs. Your memory map fills up on day one.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="stat">
+    <div class="stat-inner">
+      <h2 class="stat-big"><span id="statNum">412</span>x fewer &ldquo;as I mentioned earlier&rdquo;s.<sup>*</sup></h2>
+      <div class="bars" id="bars">
+        <div class="bar"><span>Other AIs</span><i><u data-w="100"></u></i><b>412</b></div>
+        <div class="bar"><span>Klydo</span><i><u data-w="1.5"></u></i><b>1</b></div>
+      </div>
+      <p class="stat-note">*Times you re-explain your idea per week. Based entirely on vibes. We haven't launched yet.</p>
+    </div>
+  </section>
+
+  <section class="final" id="final">
+    <div class="final-inner">
+      <h2 data-chars>Your next idea deserves a better room.</h2>
+      <button class="btn" type="button" data-access data-magnet>Get early access</button>
+    </div>
+    <div class="final-word" id="finalWord" aria-hidden="true">klydo</div>
+    <footer class="foot">
+      <span>© 2026 Klydo AI</span>
+      <span>Every tool. One memory of your idea.</span>
+    </footer>
+  </section>
+</main>
+
+<div class="access" id="access" role="dialog" aria-modal="true" aria-labelledby="accessTitle" hidden>
+  <canvas class="access-bg" id="paintBg" aria-hidden="true"></canvas>
+  <div class="access-card" id="accessCard">
+    <div class="access-art">
+      <canvas id="paint" role="img" aria-label="A pointillist painting of people resting in a meadow"></canvas>
+    </div>
+    <div class="access-side">
+      <button class="access-back" type="button" data-close>&larr; Back</button>
+
+      <form class="access-form" id="accessForm" novalidate>
+        <div class="access-titles">
+          <p>Get early access to</p>
+          <h2 id="accessTitle">Where Ideas Stay Alive</h2>
+        </div>
+        <div class="access-fields">
+          <label class="sr" for="acName">Name</label>
+          <input id="acName" name="name" type="text" placeholder="Enter name" autocomplete="name" required>
+          <label class="sr" for="acEmail">Email</label>
+          <input id="acEmail" name="email" type="email" placeholder="Enter email" autocomplete="email" required>
+          <p class="access-error" id="accessError" role="alert"></p>
+          <button class="access-submit" id="accessSubmit" type="submit">Join the list</button>
+        </div>
+      </form>
+
+      <div class="access-done" id="accessDone" hidden>
+        <p>You're on the list</p>
+        <h2 id="doneTitle">See you inside.</h2>
+        <p class="access-done-sub" id="doneSub"></p>
+      </div>
+
+      <div class="access-foot">
+        <span class="access-logo"><svg aria-hidden="true"><use href="#mark"/></svg>klydo</span>
+        <small>Every tool. One memory<br>of your idea.</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrambleTextPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
